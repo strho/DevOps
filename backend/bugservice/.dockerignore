@@ -1,0 +1,22 @@
+# Ignore .NET build artifacts
+bin/
+obj/
+
+# Ignore NuGet packages
+*.nupkg
+
+# Ignore Visual Studio files
+.vs/
+
+# Ignore user-specific files
+*.user
+
+# Ignore build output
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+AnyCPU/
+*.exe
+*.dll
+*.pdb

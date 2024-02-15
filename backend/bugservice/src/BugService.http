@@ -1,0 +1,37 @@
+@BugService_HostAddress = http://localhost:8080
+
+GET {{BugService_HostAddress}}/bugs
+Accept: application/json
+
+###
+
+GET {{BugService_HostAddress}}/bugs/2
+Accept: application/json
+
+###
+
+POST {{BugService_HostAddress}}/bugs
+Content-Type: application/json
+Accept: application/json
+
+{
+    "title": "Bug 1 - Super Bug",
+    "status": "OPEN"
+}
+
+###
+
+PUT {{BugService_HostAddress}}/bugs/1
+Content-Type: application/json
+Accept: application/json
+
+{
+    "title": "Bug 1",
+    "description": "Awesome Bug!",
+    "status": "OPEN"
+}
+
+###
+
+DELETE  {{BugService_HostAddress}}/bugs/1
+Accept: application/json
