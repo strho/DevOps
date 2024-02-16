@@ -1,4 +1,4 @@
-name: Build and Test
+name: Build Bug Service
 
 on:
   push:
@@ -14,40 +14,16 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 8.x
-
-      - name: Restore dependencies
-        run: dotnet restore backend/bugservice/src
-
-      - name: Build application
-        run: dotnet build backend/bugservice/src
+    uses: ./.github/workflows/dotnet.yml
+    with:
+      path: 'backend/bugservice/src'
   
   push_to_registry:
     needs: build
     if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out the repo
-        uses: actions/checkout@v4
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v1 
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: backend/bugservice
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bugservice:latest
+    uses: ./.github/workflows/docker_push.yml
+    with:
+      context: 'backend/bugservice'
+    secrets:
+      user: ${{ secrets.DOCKERHUB_USERNAME }}
+      token: ${{ secrets.DOCKERHUB_TOKEN }}
