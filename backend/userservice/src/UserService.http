@@ -22,7 +22,7 @@ Accept: application/json
 
 ###
 
-PUT {{UserService_HostAddress}}/users/1
+PUT {{UserService_HostAddress}}/users/11
 Content-Type: application/json
 Accept: application/json
 
@@ -33,5 +33,5 @@ Accept: application/json
 
 ###
 
-DELETE  {{UserService_HostAddress}}/users/1
+DELETE  {{UserService_HostAddress}}/users/12
 Accept: application/json

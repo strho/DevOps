@@ -9,6 +9,7 @@ services:
       - UserService__Url=http://userservice:8080
     depends_on:
       - bugservicedb
+      - rabbitmq
     networks:
       - app-network
     ports:
@@ -22,6 +23,7 @@ services:
       - ConnectionStrings__DefaultConnection=Host=userservicedb;Database=users;Username=postgres;Password=postgres
     depends_on:
       - userservicedb
+      - rabbitmq
     networks:
       - app-network
     ports:
@@ -46,6 +48,17 @@ services:
       - POSTGRES_PASSWORD=postgres
     volumes:
       - db-data-bugservice:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
     networks:
       - app-network
 

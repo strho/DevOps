@@ -1,14 +1,18 @@
 using Microsoft.EntityFrameworkCore;
+using MassTransit;
+using BugTracker.Contracts;
 
 namespace UserService.Services;
 
 public class UserService : IUserService
 {
     private readonly UserContext _context;
+    private readonly IPublishEndpoint _publishEndpoint;
 
-    public UserService(UserContext context)
+    public UserService(UserContext context, IPublishEndpoint publishEndpoint)
     {
         _context = context;
+        _publishEndpoint = publishEndpoint;
     }
 
     public async Task<UserDTO?> Get(int id)
@@ -22,7 +26,7 @@ public class UserService : IUserService
         return await _context.Users.Select(user => new UserDTO(user)).ToListAsync();
     }
 
-    public async Task<int> Create(UserDTO userDTO)
+    public async Task<UserDTO> Create(UserDTO userDTO)
     {
         var user = new User
         {
@@ -34,15 +38,15 @@ public class UserService : IUserService
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
 
-        return user.Id;
+        return new UserDTO(user);
     }
 
-    public async Task<bool> Update(int id, UserDTO userDTO)
+    public async Task<UserDTO> Update(int id, UserDTO userDTO)
     {
         var user = await _context.Users.FindAsync(id);
         if (user == null)
         {
-            return false;
+            return userDTO;
         }
 
         user.Name = userDTO.Name ?? user.Name;
@@ -50,7 +54,8 @@ public class UserService : IUserService
         user.Department = userDTO.Department ?? user.Department;
 
         await _context.SaveChangesAsync();
-        return true;
+        
+        return new UserDTO(user);
     }
 
     public async Task<bool> Delete(int id)
@@ -63,6 +68,9 @@ public class UserService : IUserService
 
         _context.Users.Remove(user);
         await _context.SaveChangesAsync();
+
+        await _publishEndpoint.Publish<UserDeletedMessage>(new { Id = id });
+
         return true;
     }
 }
