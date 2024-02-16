@@ -14,7 +14,7 @@ Accept: application/json
 ###
 # Assign a bug to a user
 
-POST {{BugService_HostAddress}}/bugs/1/assign/2
+POST {{BugService_HostAddress}}/bugs/2/assign/12
 Accept: application/json
 
 ###

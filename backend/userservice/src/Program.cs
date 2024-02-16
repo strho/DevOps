@@ -1,7 +1,11 @@
 using UserService.Services;
 using Microsoft.EntityFrameworkCore;
+
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+
+using MassTransit;
+using MassTransit.Metadata;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,10 +14,20 @@ builder.Services.AddDbContext<UserContext>(options =>
 
 builder.Services.AddScoped<IUserService, UserService.Services.UserService>();
 
+builder.Services.AddMassTransit(options =>
+{
+    options.SetKebabCaseEndpointNameFormatter();
+    options.UsingRabbitMq((context, config) =>
+    {
+        config.Host(HostMetadataCache.IsRunningInContainer ? "rabbitmq" : "localhost", "/");
+        config.ConfigureEndpoints(context);
+    });
+});
+
 var app = builder.Build();
 app.UseHttpsRedirection();
 
-using(var scope = app.Services.CreateScope())
+using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<UserContext>();
@@ -33,14 +47,19 @@ user.MapGet("/{id}", async Task<Results<Ok<UserDTO>, NotFound>> (IUserService se
 );
 
 user.MapPost("/", async (IUserService service, [FromBody] UserDTO userDTO) =>
-    TypedResults.Created($"/users/{await service.Create(userDTO)}", userDTO)
-);
+{
+    var result = await service.Create(userDTO);
+    return TypedResults.Created($"/users/{result.Id}", result);
+});
 
-user.MapPut("/{id}", async Task<Results<Ok, NotFound>> (IUserService service, int id, [FromBody] UserDTO userDTO) =>
-    await service.Update(id, userDTO)
-        ? TypedResults.Ok()
-        : TypedResults.NotFound()
-);
+user.MapPut("/{id}", async Task<Results<Ok<UserDTO>, NotFound>> (IUserService service, int id, [FromBody] UserDTO userDTO) =>
+{
+    if (!(await service.Get(id) is UserDTO))
+        return TypedResults.NotFound();
+
+    var result = await service.Update(id, userDTO);
+    return TypedResults.Ok(result);
+});
 
 user.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (IUserService service, int id) =>
     await service.Delete(id)

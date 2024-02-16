@@ -5,9 +5,9 @@ public interface IUserService {
 
     Task<IEnumerable<UserDTO>> GetAll();
     
-    Task<int> Create(UserDTO userDTO);
+    Task<UserDTO> Create(UserDTO userDTO);
     
-    Task<bool> Update(int id, UserDTO userDTO);
+    Task<UserDTO> Update(int id, UserDTO userDTO);
     
     Task<bool> Delete(int id);
 }

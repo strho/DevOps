@@ -24,7 +24,7 @@ public class BugService : IBugService
         return await _context.Bugs.Select(bug => new BugDTO(bug)).ToListAsync();
     }
 
-    public async Task<int> Create(BugDTO bugDTO)
+    public async Task<BugDTO> Create(BugDTO bugDTO)
     {
         var bug = new Bug
         {
@@ -36,15 +36,15 @@ public class BugService : IBugService
         _context.Bugs.Add(bug);
         await _context.SaveChangesAsync();
 
-        return bug.Id;
+        return new BugDTO(bug);
     }
 
-    public async Task<bool> Update(int id, BugDTO bugDTO)
+    public async Task<BugDTO> Update(int id, BugDTO bugDTO)
     {
         var bug = await _context.Bugs.FindAsync(id);
         if (bug == null)
         {
-            return false;
+            return bugDTO;
         }
 
         bug.Title = bugDTO.Title ?? bug.Title;
@@ -52,7 +52,7 @@ public class BugService : IBugService
         bug.Status = bugDTO.Status ?? bug.Status;
 
         await _context.SaveChangesAsync();
-        return true;
+        return new BugDTO(bug);
     }
 
     public async Task<bool> Delete(int id)
@@ -98,5 +98,17 @@ public class BugService : IBugService
         await _context.SaveChangesAsync();
 
         return true;
+    }
+
+    public async Task UnassignFromUser(int userId)
+    {
+        var assignedBugs = _context.Bugs.Where(bug => bug.AssignedTo == userId);
+
+        foreach (var bug in assignedBugs)
+        {
+            bug.AssignedTo = null;
+        }
+
+        await _context.SaveChangesAsync();
     }
 }

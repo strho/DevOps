@@ -6,13 +6,15 @@ public interface IBugService
     
     Task<IEnumerable<BugDTO>> GetAll();
     
-    Task<int> Create(BugDTO bugDTO);
+    Task<BugDTO> Create(BugDTO bugDTO);
     
-    Task<bool> Update(int id, BugDTO bugDTO);
+    Task<BugDTO> Update(int id, BugDTO bugDTO);
     
     Task<bool> Delete(int id);
 
     Task<bool> AssignBug(int bugId, int userId);
 
     Task<bool> UnassignBug(int bugId);
+
+    Task UnassignFromUser(int userId);
 }
