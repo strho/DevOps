@@ -5,22 +5,46 @@ services:
       context: backend/bugservice
       dockerfile: Dockerfile
     environment:
-      - ConnectionStrings__DefaultConnection=Host=db;Database=bugtracker;Username=postgres;Password=postgres
+      - ConnectionStrings__DefaultConnection=Host=bugservicedb;Database=bugs;Username=postgres;Password=postgres
     depends_on:
-      - db
+      - bugservicedb
     networks:
       - app-network
     ports:
       - "8080:8080"
 
-  db:
+  userservice:
+    build:
+      context: backend/userservice
+      dockerfile: Dockerfile
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=userservicedb;Database=users;Username=postgres;Password=postgres
+    depends_on:
+      - userservicedb
+    networks:
+      - app-network
+    ports:
+      - "8081:8080"
+
+  userservicedb:
     image: postgres:latest
     environment:
-      - POSTGRES_DB=bugtracker
+      - POSTGRES_DB=users
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - db-data-userservice:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  bugservicedb:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=bugs
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - db-data-bugservice:/var/lib/postgresql/data
     networks:
       - app-network
 
@@ -29,4 +53,5 @@ networks:
     driver: bridge
 
 volumes:
-  db-data:
+  db-data-bugservice:
+  db-data-userservice:

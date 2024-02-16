@@ -1,0 +1,37 @@
+@UserService_HostAddress = http://localhost:8081
+
+GET {{UserService_HostAddress}}/users
+Accept: application/json
+
+###
+
+GET {{UserService_HostAddress}}/users/2
+Accept: application/json
+
+###
+
+POST {{UserService_HostAddress}}/users
+Content-Type: application/json
+Accept: application/json
+
+{
+    "name": "John Doe",
+    "email": "john@doe.test",
+    "department": "IT"
+}
+
+###
+
+PUT {{UserService_HostAddress}}/users/1
+Content-Type: application/json
+Accept: application/json
+
+{
+    "name": "John Doe",
+    "department": "DevOps"
+}
+
+###
+
+DELETE  {{UserService_HostAddress}}/users/1
+Accept: application/json
