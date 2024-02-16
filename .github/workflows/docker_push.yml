@@ -7,6 +7,14 @@ on:
         type: string
         required: true
         description: 'Path to the Docker context to build and push'
+      repository:
+        type: string
+        required: true
+        description: 'Name of the repository to push the image to'
+      tag:
+        type: string
+        required: true
+        description: 'Tag to push the image with'
     secrets:
       user:
         required: true
@@ -32,4 +40,4 @@ jobs:
         with:
           context: ${{ inputs.context }}
           push: true
-          tags: ${{ secrets.user }}/userservice:latest
+          tags: ${{ secrets.user }}/${{ inputs.repository }}:${{ inputs.tag }}
