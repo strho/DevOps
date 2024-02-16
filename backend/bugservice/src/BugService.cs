@@ -5,10 +5,12 @@ namespace BugService.Services;
 public class BugService : IBugService
 {
     private readonly BugContext _context;
+    private readonly UserClient _userClient;
 
-    public BugService(BugContext context)
+    public BugService(BugContext context, UserClient userClient)
     {
         _context = context;
+        _userClient = userClient;
     }
 
     public async Task<BugDTO?> Get(int id)
@@ -33,7 +35,7 @@ public class BugService : IBugService
 
         _context.Bugs.Add(bug);
         await _context.SaveChangesAsync();
-        
+
         return bug.Id;
     }
 
@@ -63,6 +65,38 @@ public class BugService : IBugService
 
         _context.Bugs.Remove(bug);
         await _context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> AssignBug(int bugId, int userId)
+    {
+        var bug = await _context.Bugs.FindAsync(bugId);
+        if (bug == null)
+        {
+            return false;
+        }
+
+        if (await _userClient.Exists(userId))
+        {
+            bug.AssignedTo = userId;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        return false;
+    }
+
+    public async Task<bool> UnassignBug(int bugId)
+    {
+        var bug = await _context.Bugs.FindAsync(bugId);
+        if (bug == null)
+        {
+            return false;
+        }
+
+        bug.AssignedTo = null;
+        await _context.SaveChangesAsync();
+
         return true;
     }
 }

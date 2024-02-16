@@ -11,4 +11,8 @@ public interface IBugService
     Task<bool> Update(int id, BugDTO bugDTO);
     
     Task<bool> Delete(int id);
+
+    Task<bool> AssignBug(int bugId, int userId);
+
+    Task<bool> UnassignBug(int bugId);
 }

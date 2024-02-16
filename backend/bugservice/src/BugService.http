@@ -1,14 +1,30 @@
 @BugService_HostAddress = http://localhost:8080
 
+# List of all the bugs
+
 GET {{BugService_HostAddress}}/bugs
 Accept: application/json
 
 ###
+# Get a bug by id
 
 GET {{BugService_HostAddress}}/bugs/2
 Accept: application/json
 
 ###
+# Assign a bug to a user
+
+POST {{BugService_HostAddress}}/bugs/1/assign/2
+Accept: application/json
+
+###
+# Unassign a bug from a user
+
+POST {{BugService_HostAddress}}/bugs/1/unassign
+Accept: application/json
+
+###
+# Create a new bug
 
 POST {{BugService_HostAddress}}/bugs
 Content-Type: application/json
@@ -21,6 +37,7 @@ Accept: application/json
 }
 
 ###
+# Update a bug
 
 PUT {{BugService_HostAddress}}/bugs/1
 Content-Type: application/json
@@ -33,6 +50,7 @@ Accept: application/json
 }
 
 ###
+# Delete a bug
 
 DELETE  {{BugService_HostAddress}}/bugs/1
 Accept: application/json

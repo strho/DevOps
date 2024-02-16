@@ -6,6 +6,7 @@ services:
       dockerfile: Dockerfile
     environment:
       - ConnectionStrings__DefaultConnection=Host=bugservicedb;Database=bugs;Username=postgres;Password=postgres
+      - UserService__Url=http://userservice:8080
     depends_on:
       - bugservicedb
     networks:

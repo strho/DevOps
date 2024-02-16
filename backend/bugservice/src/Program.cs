@@ -10,6 +10,7 @@ builder.Services.AddDbContext<BugContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IBugService, BugService.Services.BugService>();
+builder.Services.AddHttpClient<UserClient>();
 
 var app = builder.Build();
 app.UseHttpsRedirection();
@@ -35,6 +36,18 @@ bugs.MapGet("/{id}", async Task<Results<Ok<BugDTO>, NotFound>> (IBugService serv
 
 bugs.MapPost("/", async (IBugService service, [FromBody] BugDTO bugDTO) =>
     TypedResults.Created($"/bugs/{await service.Create(bugDTO)}", bugDTO)
+);
+
+bugs.MapPost("/{id}/assign/{userId}", async Task<Results<Ok, NotFound>> (IBugService service, int id, int userId) =>
+    await service.AssignBug(id, userId)
+        ? TypedResults.Ok()
+        : TypedResults.NotFound()
+);
+
+bugs.MapPost("/{id}/unassign", async Task<Results<Ok, NotFound>> (IBugService service, int id) =>
+    await service.UnassignBug(id)
+        ? TypedResults.Ok()
+        : TypedResults.NotFound()
 );
 
 bugs.MapPut("/{id}", async Task<Results<Ok, NotFound>> (IBugService service, int id, [FromBody] BugDTO bugDTO) =>
