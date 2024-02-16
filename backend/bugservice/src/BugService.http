@@ -16,6 +16,7 @@ Accept: application/json
 
 {
     "title": "Bug 1 - Super Bug",
+    "description": "Awesome Bug!",
     "status": "OPEN"
 }
 
