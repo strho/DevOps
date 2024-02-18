@@ -1,5 +1,4 @@
 import { Requester } from "./requester";
-import { User } from "./userservice";
 
 export type Bug = {
     id: number;
