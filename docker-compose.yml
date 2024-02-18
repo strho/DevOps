@@ -1,5 +1,17 @@
 version: '3.8'
 services:
+  frontend:
+    build:
+      context: frontend/bugtracker
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    depends_on:
+      - bugservice
+      - userservice
+    networks:
+      - app-network
+      
   bugservice:
     build:
       context: backend/bugservice
@@ -13,7 +25,7 @@ services:
     networks:
       - app-network
     ports:
-      - "8080:8080"
+      - 8080:8080
 
   userservice:
     build:
@@ -27,7 +39,7 @@ services:
     networks:
       - app-network
     ports:
-      - "8081:8080"
+      - 8081:8080
 
   userservicedb:
     image: postgres:latest
@@ -54,8 +66,8 @@ services:
   rabbitmq:
     image: rabbitmq:3-management
     ports:
-      - "15672:15672"
-      - "5672:5672"
+      - 15672:15672
+      - 5672:5672
     volumes:
       - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
       - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
