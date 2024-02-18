@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import {
-  MRT_EditActionButtons,
+  MRT_EditActionButtons as MRTEditActionButtons,
   MaterialReactTable,
   // createRow,
   type MRT_ColumnDef,
@@ -180,7 +180,7 @@ const BugsTable = () => {
           {internalEditComponents} {/* or render custom edit components here */}
         </DialogContent>
         <DialogActions>
-          <MRT_EditActionButtons variant="text" table={table} row={row} />
+          <MRTEditActionButtons variant="text" table={table} row={row} />
         </DialogActions>
       </>
     ),
@@ -194,7 +194,7 @@ const BugsTable = () => {
           {internalEditComponents} {/* or render custom edit components here */}
         </DialogContent>
         <DialogActions>
-          <MRT_EditActionButtons variant="text" table={table} row={row} />
+          <MRTEditActionButtons variant="text" table={table} row={row} />
         </DialogActions>
       </>
     ),
