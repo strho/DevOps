@@ -1,4 +1,4 @@
-name: Build Bug Service
+name: 'Bugservice: Build'
 
 on:
   workflow_dispatch:

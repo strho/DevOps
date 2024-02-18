@@ -1,5 +1,4 @@
-name: Build User Service
-
+name: 'Userservice: Build'
 on:
   workflow_dispatch:
   push:
