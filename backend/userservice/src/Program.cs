@@ -14,6 +14,17 @@ builder.Services.AddDbContext<UserContext>(options =>
 
 builder.Services.AddScoped<IUserService, UserService.Services.UserService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
+
 builder.Services.AddMassTransit(options =>
 {
     options.SetKebabCaseEndpointNameFormatter();
@@ -25,6 +36,7 @@ builder.Services.AddMassTransit(options =>
 });
 
 var app = builder.Build();
+app.UseCors();
 app.UseHttpsRedirection();
 
 using (var scope = app.Services.CreateScope())
