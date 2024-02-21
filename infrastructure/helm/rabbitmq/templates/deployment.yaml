@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "rabbitmq.fullname" . }}
+  labels:
+    {{- include "rabbitmq.labels" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "rabbitmq.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "rabbitmq.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+      containers:
+        - name: {{ .Chart.Name }}
+          image: mcr.microsoft.com/mirror/docker/library/rabbitmq:{{ .Values.image.tag | default "latest" }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 5672
+              name: rabbitmq-amqp
+
+            - containerPort: 15672
+              name: rabbitmq-http
+          
+          volumeMounts:
+            - name: {{ include "rabbitmq.fullname" . }}-plugins
+              mountPath: /etc/rabbitmq/enabled_plugins
+              subPath: enabled_plugins
+      volumes:
+        - name: {{ include "rabbitmq.fullname" . }}-plugins
+          configMap:
+            name: {{ include "rabbitmq.fullname" . }}-plugins
+            items:
+              - key: rabbitmq_enabled_plugins
+                path: enabled_plugins

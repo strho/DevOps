@@ -1,0 +1,13 @@
+1. Get RabbitMQ resources
+
+Service
+---
+kubectl get service {{ include "rabbitmq.fullname" . }} --namespace {{ .Release.Namespace }}
+
+Deployment
+---
+kubectl get deployment {{ include "rabbitmq.fullname" . }} --namespace {{ .Release.Namespace }}
+
+Pod
+---
+kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "rabbitmq.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
