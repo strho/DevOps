@@ -14,7 +14,7 @@ export class UserService extends Requester {
     public constructor() {
         super();
 
-        this.url = 'http://localhost:8081/users';
+        this.url = `${process.env.REACT_APP_USER_SERVICE_URL}/users`;
     }
 
     public async getUsers(): Promise<User[]> {

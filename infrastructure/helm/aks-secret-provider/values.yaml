@@ -1,0 +1,11 @@
+connection:
+  clientId: ""
+  tenantId: ""
+  vaultName: ""
+
+secrets: []
+
+# additional config for the CSI driver
+secrets-store-csi-driver:
+  # rotate the secrets every 2 minutes
+  enableSecretRotation: true

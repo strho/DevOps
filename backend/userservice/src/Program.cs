@@ -48,6 +48,8 @@ using (var scope = app.Services.CreateScope())
 
 var user = app.MapGroup("/users");
 
+app.MapGet("/health", () => TypedResults.Ok("Healthy"));
+
 user.MapGet("/", async (IUserService service) =>
     TypedResults.Ok(await service.GetAll())
 );

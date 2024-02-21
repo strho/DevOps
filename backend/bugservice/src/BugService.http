@@ -1,5 +1,11 @@
 @BugService_HostAddress = http://localhost:8080
 
+# Health Check
+
+GET {{BugService_HostAddress}}/health
+Accept: application/json
+
+###
 # List of all the bugs
 
 GET {{BugService_HostAddress}}/bugs

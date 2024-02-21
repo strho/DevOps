@@ -55,6 +55,8 @@ using(var scope = app.Services.CreateScope())
 
 var bugs = app.MapGroup("/bugs");
 
+app.MapGet("/health", () => TypedResults.Ok("Healthy"));
+
 bugs.MapGet("/", async (IBugService service) =>
     TypedResults.Ok(await service.GetAll())
 );

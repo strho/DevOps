@@ -1,0 +1,61 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bugtracker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bugtracker
+  template:
+    metadata:
+      labels:
+        app: bugtracker
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+      containers:
+        - name: bugtracker
+          image: kriat/bugtracker:preview
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+              name: bugtracker
+          env:
+            - name: REACT_APP_BUG_SERVICE_URL
+              value: "http://13.95.1.131/bugservice"
+
+            - name: REACT_APP_USER_SERVICE_URL
+              value: "http://13.95.1.131/userservice"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bugtracker-service
+  labels:
+    app: bugtracker
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 3000
+  selector:
+    app: bugtracker
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bugtracker-ingress
+spec:
+  ingressClassName: azure-application-gateway
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Exact
+            backend:
+              service:
+                name: bugtracker-service
+                port:
+                  number: 80
