@@ -1,10 +1,10 @@
-{{- $fullName := include "userservice.fullname" . -}}
+{{- $fullName := include "base-microservice.fullname" . -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ $fullName }}
   labels:
-    {{- include "userservice.labels" . | nindent 4 }}
+    {{- include "base-microservice.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}

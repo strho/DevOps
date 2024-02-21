@@ -1,0 +1,35 @@
+replicaCount: 1
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  tag: ""
+
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+podLabels: {}
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  className: ""
+  annotations: {}
+  path: /
+  pathType: Exact
+
+resources: {}
+
+livenessProbe: {}
+readinessProbe: {}
+
+initContainers: []
+
+env: []
+
+volumes: []
+
+volumeMounts: []

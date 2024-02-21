@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "bugservice.name" -}}
+{{- define "base-microservice.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "bugservice.fullname" -}}
+{{- define "base-microservice.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "bugservice.chart" -}}
+{{- define "base-microservice.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "bugservice.labels" -}}
-helm.sh/chart: {{ include "bugservice.chart" . }}
-{{ include "bugservice.selectorLabels" . }}
+{{- define "base-microservice.labels" -}}
+helm.sh/chart: {{ include "base-microservice.chart" . }}
+{{ include "base-microservice.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,7 +45,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "bugservice.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "bugservice.name" . }}
+{{- define "base-microservice.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "base-microservice.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
