@@ -14,7 +14,7 @@ export class BugService extends Requester {
     public constructor() {
         super();
 
-        this.url = 'http://localhost:8080/bugs';
+        this.url = `${process.env.REACT_APP_BUG_SERVICE_URL}/bugs`;
     }
 
     public async getBugs(): Promise<Bug[]> {
