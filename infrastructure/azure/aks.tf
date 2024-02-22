@@ -38,11 +38,22 @@ resource "azurerm_kubernetes_cluster" "cluster" {
     gateway_id = azurerm_application_gateway.app_gateway.id
   }
 
+  # If deploying Managed Prometheus, the monitor_metrics properties are required to configure the cluster for metrics collection. If no value is needed, set properties to null.
+  monitor_metrics {
+    annotations_allowed = null
+    labels_allowed      = null
+  }
+
   default_node_pool {
     name           = "default"
     node_count     = 1
     vm_size        = "Standard_D2_v2"
     vnet_subnet_id = azurerm_subnet.aks_subnet.id
+  }
+
+  oms_agent {
+    log_analytics_workspace_id      = azurerm_log_analytics_workspace.workspace.id
+    msi_auth_for_monitoring_enabled = true
   }
 
   key_vault_secrets_provider {
