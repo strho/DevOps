@@ -9,7 +9,7 @@ image:
   pullPolicy: IfNotPresent
   tag: "3.10-management-alpine"
 
-nameOverride: ""
-fullnameOverride: ""
+nameOverride: "rabbitmq"
+fullnameOverride: "rabbitmq"
 
 podLabels: {}

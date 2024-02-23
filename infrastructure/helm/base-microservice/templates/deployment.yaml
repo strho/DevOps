@@ -22,7 +22,7 @@ spec:
         {{- end }}
     spec:
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ include "base-microservice.name" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:

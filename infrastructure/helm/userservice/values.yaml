@@ -7,7 +7,7 @@ base-microservice:
     tag: "latest"
 
   nameOverride: "userservice"
-  fullnameOverride: ""
+  fullnameOverride: "userservice"
 
   podLabels: {}
 

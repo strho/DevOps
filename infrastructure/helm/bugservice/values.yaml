@@ -3,11 +3,11 @@ base-microservice:
 
   image:
     repository: kriat/bugservice
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
     tag: "latest"
 
   nameOverride: "bugservice"
-  fullnameOverride: ""
+  fullnameOverride: "bugservice"
 
   podLabels: {}
 
