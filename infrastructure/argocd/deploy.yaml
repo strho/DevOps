@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bugtracker
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    - repoURL: https://github.com/strho/DevOps.git
+      targetRevision: feature/argocd
+      path: infrastructure/helm/rabbitmq
+      helm:
+        version: v3
+        valueFiles:
+          - values.yaml
+    - repoURL: https://github.com/strho/DevOps.git
+      targetRevision: feature/argocd
+      path: infrastructure/helm/bugservice
+      helm:
+        version: v3
+        valueFiles:
+          - values.yaml
+    - repoURL: https://github.com/strho/DevOps.git
+      targetRevision: feature/argocd
+      path: infrastructure/helm/userservice
+      helm:
+        version: v3
+        valueFiles:
+          - values.yaml
+    - repoURL: https://github.com/strho/DevOps.git
+      targetRevision: feature/argocd
+      path: infrastructure/helm/frontend
+      helm:
+        version: v3
+        valueFiles:
+          - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
