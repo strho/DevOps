@@ -6,8 +6,8 @@ base-microservice:
     pullPolicy: IfNotPresent
     tag: "latest"
 
-  nameOverride: ""
-  fullnameOverride: ""
+  nameOverride: "bugtracker"
+  fullnameOverride: "bugtracker"
 
   podLabels: {}
 
